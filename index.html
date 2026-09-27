@@ -375,51 +375,42 @@ async function sendCrypto() {
 
   if (!walletAddress) return;
 
-  const recipient = prompt(
-    "Enter the recipient wallet address:"
-  );
-
+  const recipient = prompt("Enter the recipient wallet address:");
   if (!recipient) return;
 
-  const amount = prompt(
-    "Enter the amount to send:"
-  );
-
+  const amount = prompt("Enter the amount of ETH to send:");
   if (!amount || isNaN(amount) || Number(amount) <= 0) {
     alert("Please enter a valid amount.");
     return;
   }
 
   try {
-    const value = "0x" + (
-      BigInt(
-        Math.floor(
-          Number(amount) * 1e18
-        )
-      )
-    ).toString(16);
+    if (!ethers.isAddress(recipient)) {
+      alert("Please enter a valid Ethereum wallet address.");
+      return;
+    }
 
-    const transactionHash =
-      await window.ethereum.request({
-        method: "eth_sendTransaction",
-        params: [{
-          from: walletAddress,
-          to: recipient,
-          value: value
-        }]
-      });
+    const provider = new ethers.BrowserProvider(window.ethereum);
+
+    const signer = await provider.getSigner();
+
+    const transaction = await signer.sendTransaction({
+      to: recipient,
+      value: ethers.parseEther(amount)
+    });
 
     alert(
       "Transaction submitted!\n\n" +
       "Transaction hash:\n" +
-      transactionHash
+      transaction.hash
     );
 
   } catch (error) {
     console.error(error);
 
     alert(
-      "Transaction was rejected or failed."
+      "Transaction was rejected or failed.\n\n" +
+      (error.shortMessage || error.message || "")
     );
   }
 }
