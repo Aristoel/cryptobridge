@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CryptoBridge | Digital Currency</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background: #0b1020;
+      color: #ffffff;
+    }
+
+    header {
+      background: #11182d;
+      border-bottom: 1px solid #27304a;
+      padding: 18px 6%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      font-size: 23px;
+      font-weight: bold;
+    }
+
+    .logo span {
+      color: #6c7cff;
+    }
+
+    nav a {
+      color: #cbd2e8;
+      text-decoration: none;
+      margin-left: 20px;
+      font-size: 14px;
+    }
+
+    .hero {
+      padding: 70px 6%;
+      text-align: center;
+      background: linear-gradient(135deg, #101936, #171d3b);
+    }
+
+    .hero h1 {
+      font-size: 42px;
+      margin-bottom: 18px;
+    }
+
+    .hero h1 span {
+      color: #7c8cff;
+    }
+
+    .hero p {
+      max-width: 650px;
+      margin: auto;
+      color: #aeb7d0;
+      line-height: 1.7;
+    }
+
+    .buttons {
+      margin-top: 30px;
+    }
+
+    button {
+      border: 0;
+      border-radius: 10px;
+      padding: 14px 22px;
+      font-weight: bold;
+      cursor: pointer;
+      margin: 5px;
+    }
+
+    .primary {
+      background: #6c7cff;
+      color: white;
+    }
+
+    .secondary {
+      background: #202944;
+      color: white;
+    }
+
+    .section {
+      padding: 50px 6%;
+    }
+
+    .section h2 {
+      margin-bottom: 25px;
+      font-size: 28px;
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+      gap: 18px;
+    }
+
+    .card {
+      background: #141c34;
+      border: 1px solid #283252;
+      border-radius: 16px;
+      padding: 24px;
+    }
+
+    .coin {
+      font-size: 28px;
+      margin-bottom: 12px;
+    }
+
+    .coin-name {
+      color: #aeb7d0;
+      font-size: 14px;
+    }
+
+    .price {
+      font-size: 23px;
+      margin-top: 10px;
+      font-weight: bold;
+    }
+
+    .change {
+      color: #50d890;
+      margin-top: 8px;
+      font-size: 14px;
+    }
+
+    .dashboard {
+      background: #10172b;
+      border-radius: 18px;
+      padding: 25px;
+      border: 1px solid #283252;
+    }
+
+    .balance {
+      font-size: 35px;
+      margin: 10px 0;
+    }
+
+    .wallet-actions {
+      margin-top: 20px;
+    }
+
+    footer {
+      padding: 30px 6%;
+      text-align: center;
+      color: #7f89a5;
+      border-top: 1px solid #27304a;
+      font-size: 13px;
+    }
+
+    @media (max-width: 600px) {
+      .hero h1 {
+        font-size: 32px;
+      }
+
+      nav a {
+        margin-left: 8px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <header>
+    <div class="logo">Crypto<span>Bridge</span></div>
+
+    <nav>
+      <a href="#markets">Markets</a>
+      <a href="#wallet">Wallet</a>
+      <a href="#mining">Mining</a>
+    </nav>
+  </header>
+
+  <section class="hero">
+    <h1>Your bridge to <span>digital currency</span></h1>
+
+    <p>
+      Explore cryptocurrency markets, manage digital assets,
+      receive payments, and connect to real blockchain networks.
+    </p>
+
+    <div class="buttons">
+      <button class="primary" onclick="openWallet()">
+        Open Wallet
+      </button>
+
+      <button class="secondary" onclick="showMining()">
+        Explore Mining
+      </button>
+    </div>
+  </section>
+
+  <section class="section" id="markets">
+    <h2>Markets</h2>
+
+    <div class="cards">
+
+      <div class="card">
+        <div class="coin">₿</div>
+        <div class="coin-name">Bitcoin (BTC)</div>
+        <div class="price">$--</div>
+        <div class="change">Live price coming soon</div>
+      </div>
+
+      <div class="card">
+        <div class="coin">Ξ</div>
+        <div class="coin-name">Ethereum (ETH)</div>
+        <div class="price">$--</div>
+        <div class="change">Live price coming soon</div>
+      </div>
+
+      <div class="card">
+        <div class="coin">◎</div>
+        <div class="coin-name">Solana (SOL)</div>
+        <div class="price">$--</div>
+        <div class="change">Live price coming soon</div>
+      </div>
+
+      <div class="card">
+        <div class="coin">₮</div>
+        <div class="coin-name">Tether (USDT)</div>
+        <div class="price">$--</div>
+        <div class="change">Live price coming soon</div>
+      </div>
+
+    </div>
+  </section>
+
+  <section class="section" id="wallet">
+    <h2>Wallet</h2>
+
+    <div class="dashboard">
+      <div>Portfolio balance</div>
+
+      <div class="balance">$0.00</div>
+
+      <div class="coin-name">
+        Connect a real wallet to display blockchain assets.
+      </div>
+
+      <div class="wallet-actions">
+        <button class="primary" onclick="connectWallet()">
+          Connect Wallet
+        </button>
+
+        <button class="secondary" onclick="receiveCrypto()">
+          Receive
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="mining">
+    <h2>Mining</h2>
+
+    <div class="cards">
+
+      <div class="card">
+        <h3>Bitcoin Mining</h3>
+        <p style="margin-top:12px;color:#aeb7d0;line-height:1.6;">
+          Connect supported mining hardware or a mining pool.
+          The website itself will not pretend to mine Bitcoin
+          using your phone or browser.
+        </p>
+      </div>
+
+      <div class="card">
+        <h3>Mining Dashboard</h3>
+        <p style="margin-top:12px;color:#aeb7d0;line-height:1.6;">
+          Track hashrate, workers, rewards and mining activity
+          once a legitimate mining connection is configured.
+        </p>
+      </div>
+
+    </div>
+  </section>
+
+  <footer>
+    © 2026 CryptoBridge — Digital asset platform
+  </footer>
+
+  <script>
+let walletAddress = null;
+
+function openWallet() {
+  document.getElementById("wallet").scrollIntoView({
+    behavior: "smooth"
+  });
+}
+
+function showMining() {
+  document.getElementById("mining").scrollIntoView({
+    behavior: "smooth"
+  });
+}
+
+async function connectWallet() {
+  if (!window.ethereum) {
+    alert(
+      "No compatible crypto wallet was detected. Install a wallet such as MetaMask and open CryptoBridge inside its browser."
+    );
+    return;
+  }
+
+  try {
+    const accounts = await window.ethereum.request({
+      method: "eth_requestAccounts"
+    });
+
+    walletAddress = accounts[0];
+
+    alert(
+      "Wallet connected:\n\n" +
+      walletAddress
+    );
+
+    updateWalletDisplay();
+
+  } catch (error) {
+    console.error(error);
+
+    alert(
+      "Wallet connection was cancelled or failed."
+    );
+  }
+}
+
+function updateWalletDisplay() {
+  const elements = document.querySelectorAll(
+    "#walletAddress, .wallet-address"
+  );
+
+  elements.forEach(element => {
+    element.textContent =
+      walletAddress
+        ? walletAddress.slice(0, 6) +
+          "..." +
+          walletAddress.slice(-4)
+        : "Not connected";
+  });
+}
+
+async function receiveCrypto() {
+  if (!walletAddress) {
+    await connectWallet();
+  }
+
+  if (!walletAddress) return;
+
+  alert(
+    "Your receiving address is:\n\n" +
+    walletAddress +
+    "\n\nOnly send assets supported by the selected blockchain network."
+  );
+}
+
+async function sendCrypto() {
+  if (!window.ethereum) {
+    alert("No compatible crypto wallet detected.");
+    return;
+  }
+
+  if (!walletAddress) {
+    await connectWallet();
+  }
+
+  if (!walletAddress) return;
+
+  const recipient = prompt(
+    "Enter the recipient wallet address:"
+  );
+
+  if (!recipient) return;
+
+  const amount = prompt(
+    "Enter the amount to send:"
+  );
+
+  if (!amount || isNaN(amount) || Number(amount) <= 0) {
+    alert("Please enter a valid amount.");
+    return;
+  }
+
+  try {
+    const value = "0x" + (
+      BigInt(
+        Math.floor(
+          Number(amount) * 1e18
+        )
+      )
+    ).toString(16);
+
+    const transactionHash =
+      await window.ethereum.request({
+        method: "eth_sendTransaction",
+        params: [{
+          from: walletAddress,
+          to: recipient,
+          value: value
+        }]
+      });
+
+    alert(
+      "Transaction submitted!\n\n" +
+      "Transaction hash:\n" +
+      transactionHash
+    );
+
+  } catch (error) {
+    console.error(error);
+
+    alert(
+      "Transaction was rejected or failed."
+    );
+  }
+}
+
+if (window.ethereum) {
+  window.ethereum.on(
+    "accountsChanged",
+    function(accounts) {
+      walletAddress =
+        accounts.length ? accounts[0] : null;
+
+      updateWalletDisplay();
+    }
+  );
+}
+  </script>
+    
+
+</body>
+  </html>
