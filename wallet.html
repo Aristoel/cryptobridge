@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Wallet — CryptoBridge</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #080e20;
+      color: white;
+    }
+
+    nav {
+      height: 62px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 45px;
+      background: #10172d;
+      border-bottom: 1px solid #202943;
+    }
+
+    .logo {
+      font-size: 20px;
+      font-weight: 700;
+    }
+
+    .logo span {
+      color: #7180ff;
+    }
+
+    nav a {
+      color: #aeb8d5;
+      text-decoration: none;
+      margin-left: 20px;
+      font-size: 14px;
+    }
+
+    .container {
+      max-width: 650px;
+      margin: 40px auto;
+      padding: 20px;
+    }
+
+    h1 {
+      font-size: 38px;
+      margin-bottom: 8px;
+    }
+
+    .subtitle {
+      color: #aeb8d5;
+      line-height: 1.6;
+      margin-bottom: 30px;
+    }
+
+    .card {
+      background: #121a34;
+      border: 1px solid #263150;
+      border-radius: 18px;
+      padding: 24px;
+      margin-bottom: 20px;
+    }
+
+    .card h2 {
+      margin-top: 0;
+    }
+
+    .wallet-address {
+      background: #080e20;
+      border: 1px solid #303b5e;
+      padding: 15px;
+      border-radius: 10px;
+      word-break: break-all;
+      color: #aeb8d5;
+      margin: 15px 0;
+    }
+
+    input,
+    select {
+      width: 100%;
+      padding: 15px;
+      margin-bottom: 15px;
+      background: #080e20;
+      color: white;
+      border: 1px solid #303b5e;
+      border-radius: 10px;
+      font-size: 16px;
+    }
+
+    button {
+      width: 100%;
+      padding: 15px;
+      border: 0;
+      border-radius: 10px;
+      background: #6675ff;
+      color: white;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      margin-top: 5px;
+    }
+
+    button:hover {
+      background: #7885ff;
+    }
+
+    .secondary {
+      background: #202943;
+    }
+
+    .status {
+      margin-top: 15px;
+      color: #aeb8d5;
+      line-height: 1.5;
+      word-break: break-word;
+    }
+
+    .warning {
+      color: #aeb8d5;
+      font-size: 13px;
+      line-height: 1.5;
+      margin-top: 15px;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    @media (max-width: 600px) {
+      nav {
+        padding: 0 18px;
+      }
+
+      nav a {
+        margin-left: 8px;
+        font-size: 12px;
+      }
+
+      h1 {
+        font-size: 32px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<nav>
+  <div class="logo">
+    Crypto<span>Bridge</span>
+  </div>
+
+  <div>
+    <a href="index.html">Markets</a>
+    <a href="buy.html">Buy</a>
+    <a href="wallet.html">Wallet</a>
+  </div>
+</nav>
+
+<div class="container">
+
+  <h1>Crypto Wallet</h1>
+
+  <p class="subtitle">
+    Connect your external wallet to send and receive supported digital assets.
+  </p>
+
+  <div class="card">
+
+    <h2>Wallet Connection</h2>
+
+    <button id="connectButton" onclick="connectWallet()">
+      Connect Wallet
+    </button>
+
+    <div id="walletSection" class="hidden">
+
+      <div class="wallet-address" id="walletAddress">
+        Not connected
+      </div>
+
+      <button class="secondary" onclick="copyAddress()">
+        Copy Wallet Address
+      </button>
+
+    </div>
+
+    <div class="status" id="connectionStatus"></div>
+
+  </div>
+
+  <div class="card">
+
+    <h2>Receive Crypto</h2>
+
+    <p class="subtitle">
+      Give your wallet address to the sender so they can send supported
+      assets to you.
+    </p>
+
+    <div class="wallet-address" id="receiveAddress">
+      Connect your wallet first.
+    </div>
+
+    <button class="secondary" onclick="copyReceiveAddress()">
+      Copy Receive Address
+    </button>
+
+  </div>
+
+  <div class="card">
+
+    <h2>Send Crypto</h2>
+
+    <label>Asset</label>
+
+    <select id="asset">
+      <option value="ETH">Ethereum (ETH)</option>
+    </select>
+
+    <label>Recipient wallet address</label>
+
+    <input
+      id="recipient"
+      type="text"
+      placeholder="0x..."
+    >
+
+    <label>Amount</label>
+
+    <input
+      id="sendAmount"
+      type="number"
+      min="0"
+      step="0.000001"
+      placeholder="0.01"
+    >
+
+    <button onclick="sendCrypto()">
+      Send Crypto
+    </button>
+
+    <div class="status" id="sendStatus"></div>
+
+    <div class="warning">
+      Always verify the recipient address and network before confirming a
+      transaction. Blockchain transactions can be irreversible.
+    </div>
+
+  </div>
+
+</div>
+
+<script>
+  let provider = null;
+  let signer = null;
+  let walletAddress = null;
+
+  async function connectWallet() {
+
+    if (!window.ethereum) {
+      document.getElementById("connectionStatus").textContent =
+        "No compatible Web3 wallet was detected. Open CryptoBridge in a compatible wallet browser or install a supported wallet.";
+      return;
+    }
+
+    try {
+
+      await window.ethereum.request({
+        method: "eth_requestAccounts"
+      });
+
+      const accounts = await window.ethereum.request({
+        method: "eth_accounts"
+      });
+
+      walletAddress = accounts[0];
+
+      document.getElementById("walletAddress").textContent =
+        walletAddress;
+
+      document.getElementById("receiveAddress").textContent =
+        walletAddress;
+
+      document.getElementById("walletSection")
+        .classList.remove("hidden");
+
+      document.getElementById("connectButton")
+        .textContent = "Wallet Connected";
+
+      document.getElementById("connectionStatus")
+        .textContent = "Wallet connected successfully.";
+
+    } catch (error) {
+
+      document.getElementById("connectionStatus").textContent =
+        error.message || "Wallet connection failed.";
+
+    }
+  }
+
+  async function copyAddress() {
+
+    if (!walletAddress) return;
+
+    await navigator.clipboard.writeText(walletAddress);
+
+    document.getElementById("connectionStatus").textContent =
+      "Wallet address copied.";
+  }
+
+  async function copyReceiveAddress() {
+
+    if (!walletAddress) {
+      document.getElementById("receiveAddress").textContent =
+        "Connect your wallet first.";
+      return;
+    }
+
+    await navigator.clipboard.writeText(walletAddress);
+
+    document.getElementById("receiveAddress").textContent =
+      walletAddress + " — copied!";
+  }
+
+  async function sendCrypto() {
+
+    const recipient =
+      document.getElementById("recipient").value.trim();
+
+    const amount =
+      document.getElementById("sendAmount").value.trim();
+
+    const status =
+      document.getElementById("sendStatus");
+
+    if (!window.ethereum) {
+      status.textContent =
+        "Connect a compatible Web3 wallet first.";
+      return;
+    }
+
+    if (!walletAddress) {
+      status.textContent =
+        "Connect your wallet first.";
+      return;
+    }
+
+    if (!recipient || !recipient.startsWith("0x") || recipient.length !== 42) {
+      status.textContent =
+        "Enter a valid EVM recipient address.";
+      return;
+    }
+
+    if (!amount || Number(amount) <= 0) {
+      status.textContent =
+        "Enter a valid amount.";
+      return;
+    }
+
+    try {
+
+      status.textContent =
+        "Waiting for wallet confirmation...";
+
+      const value = BigInt(
+        Math.round(Number(amount) * 1e18)
+      ).toString(16);
+
+      const txHash =
+        await window.ethereum.request({
+          method: "eth_sendTransaction",
+          params: [{
+            from: walletAddress,
+            to: recipient,
+            value: "0x" + value
+          }]
+        });
+
+      status.innerHTML =
+        "Transaction submitted.<br><br>" +
+        "Transaction hash:<br>" +
+        txHash;
+
+    } catch (error) {
+
+      status.textContent =
+        error.message || "Transaction failed.";
+
+    }
+  }
+</script>
+
+</body>
+  </html>
