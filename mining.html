@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CryptoBridge Mining</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background: #0b1020;
+      color: #ffffff;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: auto;
+    }
+
+    .header {
+      margin-bottom: 25px;
+    }
+
+    .header h1 {
+      font-size: 30px;
+      margin-bottom: 8px;
+    }
+
+    .header p {
+      color: #9ca3af;
+    }
+
+    .status {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 15px;
+      padding: 8px 13px;
+      border-radius: 20px;
+      background: #12351f;
+      color: #4ade80;
+      font-size: 14px;
+    }
+
+    .dot {
+      width: 9px;
+      height: 9px;
+      background: #22c55e;
+      border-radius: 50%;
+    }
+
+    .coins {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 18px;
+    }
+
+    .card {
+      background: #151c31;
+      border: 1px solid #26304a;
+      border-radius: 16px;
+      padding: 22px;
+    }
+
+    .coin-title {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .coin-title h2 {
+      font-size: 22px;
+    }
+
+    .badge {
+      padding: 5px 9px;
+      border-radius: 12px;
+      font-size: 12px;
+      background: #12351f;
+      color: #4ade80;
+    }
+
+    .btc .badge {
+      background: #3b2b0a;
+      color: #fbbf24;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+
+    .stat {
+      background: #0d1426;
+      padding: 15px;
+      border-radius: 12px;
+    }
+
+    .stat span {
+      display: block;
+      color: #9ca3af;
+      font-size: 12px;
+      margin-bottom: 7px;
+    }
+
+    .stat strong {
+      font-size: 18px;
+    }
+
+    .wallet {
+      margin-top: 18px;
+      padding: 14px;
+      background: #0d1426;
+      border-radius: 12px;
+      word-break: break-all;
+    }
+
+    .wallet span {
+      display: block;
+      color: #9ca3af;
+      font-size: 12px;
+      margin-bottom: 6px;
+    }
+
+    .wallet code {
+      color: #dbeafe;
+      font-size: 11px;
+    }
+
+    .notice {
+      margin-top: 20px;
+      background: #151c31;
+      border: 1px solid #26304a;
+      border-radius: 16px;
+      padding: 20px;
+    }
+
+    .notice h3 {
+      margin-bottom: 10px;
+    }
+
+    .notice p {
+      color: #9ca3af;
+      line-height: 1.6;
+      font-size: 14px;
+    }
+
+    .back {
+      display: inline-block;
+      margin-top: 25px;
+      color: #93c5fd;
+      text-decoration: none;
+    }
+
+    @media (max-width: 500px) {
+      body {
+        padding: 14px;
+      }
+
+      .header h1 {
+        font-size: 25px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="container">
+
+    <div class="header">
+      <h1>⛏️ CryptoBridge Mining</h1>
+      <p>Mining workers and cryptocurrency status</p>
+
+      <div class="status">
+        <span class="dot"></span>
+        Mining system online
+      </div>
+    </div>
+
+    <div class="coins">
+
+      <!-- MONERO -->
+      <div class="card">
+        <div class="coin-title">
+          <h2>Monero (XMR)</h2>
+          <span class="badge">MINING</span>
+        </div>
+
+        <div class="stats">
+          <div class="stat">
+            <span>Algorithm</span>
+            <strong>RandomX</strong>
+          </div>
+
+          <div class="stat">
+            <span>Hashrate</span>
+            <strong>~13 H/s</strong>
+          </div>
+
+          <div class="stat">
+            <span>Worker</span>
+            <strong>Phone</strong>
+          </div>
+
+          <div class="stat">
+            <span>Status</span>
+            <strong>Online</strong>
+          </div>
+        </div>
+
+        <div class="wallet">
+          <span>XMR Wallet</span>
+          <code>
+            48ggc215HaAHXystaFg6fzJShBBddJyQ2druNWkw4NSuRmcm4B1Y7v42nhoa2i7uLFhQWGXMvxGGRKH3vd7MTtdy7SPkVB7
+          </code>
+        </div>
+      </div>
+
+
+      <!-- BITCOIN -->
+      <div class="card btc">
+        <div class="coin-title">
+          <h2>Bitcoin (BTC)</h2>
+          <span class="badge">REMOTE</span>
+        </div>
+
+        <div class="stats">
+          <
