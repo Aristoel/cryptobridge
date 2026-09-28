@@ -390,39 +390,26 @@
 
     function getHashrate(data) {
 
-      const direct = findValue(data, [
-        "hashrate",
-        "hashRate",
-        "hash_rate",
-        "currentHashrate",
-        "current_hashrate"
-      ]);
+  const workers = getWorkers(data);
 
-      if (direct !== undefined) {
-        return direct;
-      }
+  if (workers.length > 0) {
+    const worker = workers[0];
 
-      const stats = data.stats || data.data || data.result;
+    return {
+      current: Number(worker.hashRate) || 0,
+      avg1m: Number(worker.avg1HashRate) || 0,
+      avg3m: Number(worker.avg3HashRate) || 0,
+      avg24h: Number(worker.avg24HashRate) || 0
+    };
+  }
 
-      if (stats) {
-
-        const nested = findValue(stats, [
-          "hashrate",
-          "hashRate",
-          "hash_rate",
-          "currentHashrate",
-          "current_hashrate"
-        ]);
-
-        if (nested !== undefined) {
-          return nested;
-        }
-
-      }
-
-      return 0;
-    }
-
+  return {
+    current: 0,
+    avg1m: 0,
+    avg3m: 0,
+    avg24h: 0
+  };  
+ } 
 
     function getBalance(data) {
 
