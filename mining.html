@@ -42,37 +42,44 @@
       align-items: center;
       gap: 8px;
       margin-top: 15px;
-      padding: 8px 13px;
+      padding: 9px 14px;
       border-radius: 20px;
-      background: #12351f;
-      color: #4ade80;
+      background: #12251b;
+      color: #6ee7a8;
       font-size: 14px;
     }
 
     .dot {
       width: 9px;
       height: 9px;
-      background: #22c55e;
       border-radius: 50%;
+      background: #22c55e;
+      display: inline-block;
+    }
+
+    .dot.offline {
+      background: #ef4444;
     }
 
     .coins {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 18px;
+      gap: 20px;
     }
 
     .card {
-      background: #151c31;
-      border: 1px solid #26304a;
+      background: #121a2d;
+      border: 1px solid #26324a;
       border-radius: 16px;
-      padding: 22px;
+      padding: 20px;
+      box-shadow: 0 10px 25px rgba(0,0,0,.2);
     }
 
     .coin-title {
       display: flex;
       justify-content: space-between;
       align-items: center;
+      gap: 10px;
       margin-bottom: 20px;
     }
 
@@ -81,94 +88,89 @@
     }
 
     .badge {
-      padding: 5px 9px;
-      border-radius: 12px;
-      font-size: 12px;
-      background: #12351f;
-      color: #4ade80;
+      background: #173d28;
+      color: #6ee7a8;
+      border-radius: 20px;
+      padding: 6px 10px;
+      font-size: 11px;
+      font-weight: bold;
     }
 
-    .btc .badge {
-      background: #3b2b0a;
-      color: #fbbf24;
+    .badge.remote {
+      background: #222c43;
+      color: #93c5fd;
     }
 
     .stats {
       display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 14px;
+      gap: 12px;
     }
 
     .stat {
-      background: #0d1426;
-      padding: 15px;
-      border-radius: 12px;
+      display: flex;
+      justify-content: space-between;
+      gap: 15px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid #222d44;
     }
 
     .stat span {
-      display: block;
       color: #9ca3af;
-      font-size: 12px;
-      margin-bottom: 7px;
     }
 
     .stat strong {
-      font-size: 18px;
+      text-align: right;
+      word-break: break-word;
     }
 
     .wallet {
       margin-top: 18px;
-      padding: 14px;
-      background: #0d1426;
-      border-radius: 12px;
-      word-break: break-all;
+      padding: 12px;
+      background: #0d1425;
+      border-radius: 10px;
     }
 
     .wallet span {
       display: block;
       color: #9ca3af;
-      font-size: 12px;
+      font-size: 13px;
       margin-bottom: 6px;
     }
 
     .wallet code {
-      color: #dbeafe;
-      font-size: 11px;
+      color: #d1d5db;
+      font-size: 12px;
+      word-break: break-all;
     }
 
-    .notice {
-      margin-top: 20px;
-      background: #151c31;
-      border: 1px solid #26304a;
-      border-radius: 16px;
-      padding: 20px;
+    .loading {
+      color: #fbbf24;
     }
 
-    .notice h3 {
-      margin-bottom: 10px;
+    .error {
+      color: #f87171;
     }
 
-    .notice p {
-      color: #9ca3af;
-      line-height: 1.6;
-      font-size: 14px;
-    }
-
-    .back {
-      display: inline-block;
+    .updated {
       margin-top: 25px;
+      color: #6b7280;
+      font-size: 12px;
+      text-align: center;
+    }
+
+    .note {
+      margin-top: 20px;
+      padding: 14px;
+      border-radius: 10px;
+      background: #111827;
+      color: #9ca3af;
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    a {
       color: #93c5fd;
       text-decoration: none;
-    }
-
-    @media (max-width: 500px) {
-      body {
-        padding: 14px;
-      }
-
-      .header h1 {
-        font-size: 25px;
-      }
     }
   </style>
 </head>
@@ -178,25 +180,28 @@
   <div class="container">
 
     <div class="header">
-      <h1>⛏️ CryptoBridge Mining</h1>
+      <h1>CryptoBridge Mining</h1>
       <p>Mining workers and cryptocurrency status</p>
 
-      <div class="status">
-        <span class="dot"></span>
-        Mining system online
+      <div class="status" id="systemStatus">
+        <span class="dot" id="statusDot"></span>
+        <span id="statusText">Checking mining system...</span>
       </div>
     </div>
+
 
     <div class="coins">
 
       <!-- MONERO -->
       <div class="card">
+
         <div class="coin-title">
           <h2>Monero (XMR)</h2>
-          <span class="badge">MINING</span>
+          <span class="badge" id="xmrBadge">CHECKING</span>
         </div>
 
         <div class="stats">
+
           <div class="stat">
             <span>Algorithm</span>
             <strong>RandomX</strong>
@@ -204,35 +209,507 @@
 
           <div class="stat">
             <span>Hashrate</span>
-            <strong>~13 H/s</strong>
+            <strong id="hashrate" class="loading">Loading...</strong>
           </div>
 
           <div class="stat">
             <span>Worker</span>
-            <strong>Phone</strong>
+            <strong id="worker">Loading...</strong>
           </div>
 
           <div class="stat">
             <span>Status</span>
-            <strong>Online</strong>
+            <strong id="workerStatus">Checking...</strong>
           </div>
+
+          <div class="stat">
+            <span>Balance</span>
+            <strong id="balance">Loading...</strong>
+          </div>
+
+          <div class="stat">
+            <span>Total Paid</span>
+            <strong id="paid">Loading...</strong>
+          </div>
+
         </div>
 
         <div class="wallet">
           <span>XMR Wallet</span>
-          <code>
-            48ggc215HaAHXystaFg6fzJShBBddJyQ2druNWkw4NSuRmcm4B1Y7v42nhoa2i7uLFhQWGXMvxGGRKH3vd7MTtdy7SPkVB7
-          </code>
+          <code id="walletDisplay">Hidden</code>
         </div>
+
       </div>
 
 
       <!-- BITCOIN -->
-      <div class="card btc">
+      <div class="card">
+
         <div class="coin-title">
           <h2>Bitcoin (BTC)</h2>
-          <span class="badge">REMOTE</span>
+          <span class="badge remote">REMOTE</span>
         </div>
 
         <div class="stats">
-          <
+
+          <div class="stat">
+            <span>Algorithm</span>
+            <strong>SHA-256</strong>
+          </div>
+
+          <div class="stat">
+            <span>Hashrate</span>
+            <strong>Not connected</strong>
+          </div>
+
+          <div class="stat">
+            <span>Worker</span>
+            <strong>Remote BTC</strong>
+          </div>
+
+          <div class="stat">
+            <span>Status</span>
+            <strong>Not connected</strong>
+          </div>
+
+        </div>
+
+        <div class="note">
+          BTC remote mining will be connected separately after the
+          Monero dashboard is working.
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <div class="updated">
+      Last updated: <span id="lastUpdated">—</span>
+    </div>
+
+    <div class="note">
+      CryptoBridge is displaying mining information from the configured
+      mining pool. Mining must be performed by an authorized miner or
+      mining service; this webpage does not secretly mine visitors'
+      devices.
+    </div>
+
+  </div>
+
+
+  <script>
+
+    /*
+     * ==========================================================
+     * CRYPTOBRIDGE MONERO SETTINGS
+     * ==========================================================
+     *
+     * IMPORTANT:
+     * Replace the value below with YOUR OWN XMR wallet address.
+     *
+     * Do not put a private wallet seed or private key here.
+     */
+
+    const WALLET = "48ggc215HaAHXystaFg6fzJShBBddJyQ2druNWkw4NSuRmcm4B1Y7v42nhoa2i7uLFhQWGXMvxGGRKH3vd7MTtdy7SPkVB7";
+
+
+    /*
+     * HashVault API
+     *
+     * HashVault documents this endpoint for wallet statistics
+     * and worker information.
+     */
+
+    const API_URL =
+      "https://api.hashvault.pro/v3/monero/wallet/" +
+      encodeURIComponent(WALLET) +
+      "/stats?workers=true&chart=false";
+
+
+    function shortenWallet(address) {
+      if (!address || address.length < 16) {
+        return "Hidden";
+      }
+
+      return address.substring(0, 8) +
+             "..." +
+             address.substring(address.length - 8);
+    }
+
+
+    function formatHashrate(value) {
+
+      if (value === undefined || value === null) {
+        return "0 H/s";
+      }
+
+      const number = Number(value);
+
+      if (!Number.isFinite(number)) {
+        return "0 H/s";
+      }
+
+      if (number >= 1000000000) {
+        return (number / 1000000000).toFixed(2) + " GH/s";
+      }
+
+      if (number >= 1000000) {
+        return (number / 1000000).toFixed(2) + " MH/s";
+      }
+
+      if (number >= 1000) {
+        return (number / 1000).toFixed(2) + " kH/s";
+      }
+
+      return number.toFixed(2) + " H/s";
+    }
+
+
+    function findValue(object, possibleNames) {
+
+      if (!object || typeof object !== "object") {
+        return undefined;
+      }
+
+      for (const name of possibleNames) {
+
+        if (
+          Object.prototype.hasOwnProperty.call(object, name) &&
+          object[name] !== null &&
+          object[name] !== undefined
+        ) {
+          return object[name];
+        }
+
+      }
+
+      return undefined;
+    }
+
+
+    function getHashrate(data) {
+
+      const direct = findValue(data, [
+        "hashrate",
+        "hashRate",
+        "hash_rate",
+        "currentHashrate",
+        "current_hashrate"
+      ]);
+
+      if (direct !== undefined) {
+        return direct;
+      }
+
+      const stats = data.stats || data.data || data.result;
+
+      if (stats) {
+
+        const nested = findValue(stats, [
+          "hashrate",
+          "hashRate",
+          "hash_rate",
+          "currentHashrate",
+          "current_hashrate"
+        ]);
+
+        if (nested !== undefined) {
+          return nested;
+        }
+
+      }
+
+      return 0;
+    }
+
+
+    function getBalance(data) {
+
+      const direct = findValue(data, [
+        "balance",
+        "confirmedBalance",
+        "confirmed_balance"
+      ]);
+
+      if (direct !== undefined) {
+        return direct;
+      }
+
+      const stats = data.stats || data.data || data.result;
+
+      if (stats) {
+
+        const nested = findValue(stats, [
+          "balance",
+          "confirmedBalance",
+          "confirmed_balance"
+        ]);
+
+        if (nested !== undefined) {
+          return nested;
+        }
+
+      }
+
+      return 0;
+    }
+
+
+    function getPaid(data) {
+
+      const direct = findValue(data, [
+        "paid",
+        "totalPaid",
+        "total_paid"
+      ]);
+
+      if (direct !== undefined) {
+        return direct;
+      }
+
+      const stats = data.stats || data.data || data.result;
+
+      if (stats) {
+
+        const nested = findValue(stats, [
+          "paid",
+          "totalPaid",
+          "total_paid"
+        ]);
+
+        if (nested !== undefined) {
+          return nested;
+        }
+
+      }
+
+      return 0;
+    }
+
+
+    function getWorkers(data) {
+
+      if (Array.isArray(data.workers)) {
+        return data.workers;
+      }
+
+      if (
+        data.stats &&
+        Array.isArray(data.stats.workers)
+      ) {
+        return data.stats.workers;
+      }
+
+      if (
+        data.data &&
+        Array.isArray(data.data.workers)
+      ) {
+        return data.data.workers;
+      }
+
+      if (
+        data.result &&
+        Array.isArray(data.result.workers)
+      ) {
+        return data.result.workers;
+      }
+
+      return [];
+    }
+
+
+    function getWorkerName(worker) {
+
+      return findValue(worker, [
+        "name",
+        "worker",
+        "workerName",
+        "worker_name",
+        "id"
+      ]) || "Phone";
+    }
+
+
+    function getWorkerHashrate(worker) {
+
+      return findValue(worker, [
+        "hashrate",
+        "hashRate",
+        "hash_rate",
+        "currentHashrate",
+        "current_hashrate"
+      ]) || 0;
+    }
+
+
+    function updateDashboard(data) {
+
+      const workers = getWorkers(data);
+
+      let totalHashrate = getHashrate(data);
+
+      let workerName = "Phone";
+
+      if (workers.length > 0) {
+
+        let worker = workers[0];
+
+        workerName = getWorkerName(worker);
+
+        let workerHashrate = getWorkerHashrate(worker);
+
+        if (workerHashrate) {
+          totalHashrate = workerHashrate;
+        }
+
+      }
+
+      document.getElementById("hashrate").textContent =
+        formatHashrate(totalHashrate);
+
+      document.getElementById("worker").textContent =
+        workerName;
+
+      document.getElementById("workerStatus").textContent =
+        workers.length > 0 ? "Online" : "No active worker";
+
+      document.getElementById("xmrBadge").textContent =
+        workers.length > 0 ? "MINING" : "OFFLINE";
+
+
+      const balance = getBalance(data);
+      const paid = getPaid(data);
+
+      document.getElementById("balance").textContent =
+        Number(balance || 0).toFixed(8) + " XMR";
+
+      document.getElementById("paid").textContent =
+        Number(paid || 0).toFixed(8) + " XMR";
+
+
+      document.getElementById("walletDisplay").textContent =
+        shortenWallet(WALLET);
+
+
+      if (workers.length > 0) {
+
+        document.getElementById("statusText").textContent =
+          "Monero mining online";
+
+        document.getElementById("statusDot").classList.remove(
+          "offline"
+        );
+
+      } else {
+
+        document.getElementById("statusText").textContent =
+          "No active Monero worker";
+
+        document.getElementById("statusDot").classList.add(
+          "offline"
+        );
+
+      }
+
+
+      document.getElementById("lastUpdated").textContent =
+        new Date().toLocaleTimeString();
+
+    }
+
+
+    async function loadMiningData() {
+
+      if (
+        !WALLET ||
+        WALLET === "PASTE_YOUR_XMR_WALLET_ADDRESS_HERE"
+      ) {
+
+        document.getElementById("statusText").textContent =
+          "XMR wallet not configured";
+
+        document.getElementById("statusDot").classList.add(
+          "offline"
+        );
+
+        document.getElementById("hashrate").textContent =
+          "Configure wallet";
+
+        document.getElementById("workerStatus").textContent =
+          "Not configured";
+
+        return;
+      }
+
+
+      try {
+
+        const response = await fetch(API_URL, {
+          method: "GET",
+          cache: "no-store"
+        });
+
+
+        if (!response.ok) {
+          throw new Error(
+            "HashVault API returned HTTP " +
+            response.status
+          );
+        }
+
+
+        const data = await response.json();
+
+        console.log("HashVault response:", data);
+
+        updateDashboard(data);
+
+
+      } catch (error) {
+
+        console.error(
+          "CryptoBridge mining API error:",
+          error
+        );
+
+
+        document.getElementById("statusText").textContent =
+          "Unable to load pool data";
+
+        document.getElementById("statusDot").classList.add(
+          "offline"
+        );
+
+        document.getElementById("xmrBadge").textContent =
+          "API ERROR";
+
+        document.getElementById("workerStatus").textContent =
+          "Unable to connect";
+
+        document.getElementById("hashrate").textContent =
+          "Unavailable";
+
+        document.getElementById("lastUpdated").textContent =
+          new Date().toLocaleTimeString();
+
+      }
+
+    }
+
+
+    /*
+     * Load immediately.
+     */
+    loadMiningData();
+
+
+    /*
+     * Refresh every 60 seconds.
+     */
+    setInterval(loadMiningData, 60000);
+
+  </script>
+
+</body>
+  </html>
