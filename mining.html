@@ -475,38 +475,65 @@
     }
 
 function getWorkers(data) {
+  const workerKeys = [
+    "collectiveWorkers",
+    "workers",
+    "workerStats",
+    "worker_stats"
+  ];
 
-  if (Array.isArray(data.collectiveWorkers)) {
-    return data.collectiveWorkers;
+  function search(obj, depth = 0) {
+    if (!obj || typeof obj !== "object" || depth > 6) {
+      return [];
+    }
+
+    if (Array.isArray(obj)) {
+      const hasWorkerData = obj.some(item =>
+        item &&
+        typeof item === "object" &&
+        (
+          item.hashRate !== undefined ||
+          item.hashrate !== undefined ||
+          item.hash_rate !== undefined ||
+          item.avgHashRate !== undefined ||
+          item.avg1mHashRate !== undefined
+        )
+      );
+
+      if (hasWorkerData) {
+        return obj;
+      }
+
+      for (const item of obj) {
+        const found = search(item, depth + 1);
+        if (found.length > 0) {
+          return found;
+        }
+      }
+
+      return [];
+    }
+
+    for (const key of workerKeys) {
+      if (Array.isArray(obj[key])) {
+        return obj[key];
+      }
+    }
+
+    for (const value of Object.values(obj)) {
+      const found = search(value, depth + 1);
+
+      if (found.length > 0) {
+        return found;
+      }
+    }
+
+    return [];
   }
 
-  if (Array.isArray(data.workers)) {
-    return data.workers;
-  }
-
-  if (
-    data.stats &&
-    Array.isArray(data.stats.workers)
-  ) {
-    return data.stats.workers;
-  }
-
-  if (
-    data.data &&
-    Array.isArray(data.data.workers)
-  ) {
-    return data.data.workers;
-  }
-
-  if (
-    data.result &&
-    Array.isArray(data.result.workers)
-  ) {
-    return data.result.workers;
-  }
-
-  return [];
-    }    
+  return search(data);
+    }
+  
     function getWorkerName(worker) {
 
       return findValue(worker, [
