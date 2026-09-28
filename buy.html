@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Buy Crypto — CryptoBridge</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #080e20;
+      color: #fff;
+    }
+
+    nav {
+      height: 62px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 45px;
+      background: #10172d;
+      border-bottom: 1px solid #202943;
+    }
+
+    .logo {
+      font-size: 20px;
+      font-weight: 700;
+    }
+
+    .logo span {
+      color: #7180ff;
+    }
+
+    nav a {
+      color: #aeb8d5;
+      text-decoration: none;
+      margin-left: 22px;
+      font-size: 14px;
+    }
+
+    nav a:hover {
+      color: white;
+    }
+
+    .container {
+      max-width: 620px;
+      margin: 55px auto;
+      padding: 0 20px;
+    }
+
+    h1 {
+      font-size: 42px;
+      margin-bottom: 10px;
+    }
+
+    .subtitle {
+      color: #aeb8d5;
+      font-size: 18px;
+      line-height: 1.6;
+      margin-bottom: 30px;
+    }
+
+    .card {
+      background: #121a34;
+      border: 1px solid #263150;
+      border-radius: 18px;
+      padding: 25px;
+      margin-bottom: 20px;
+    }
+
+    label {
+      display: block;
+      color: #c4cbe0;
+      margin-bottom: 9px;
+      font-weight: 600;
+    }
+
+    select,
+    input {
+      width: 100%;
+      padding: 15px;
+      border-radius: 10px;
+      border: 1px solid #303b5e;
+      background: #0b1227;
+      color: white;
+      font-size: 17px;
+      outline: none;
+      margin-bottom: 20px;
+    }
+
+    select:focus,
+    input:focus {
+      border-color: #7180ff;
+    }
+
+    .estimate {
+      background: #0b1227;
+      border-radius: 12px;
+      padding: 16px;
+      margin-bottom: 20px;
+      color: #aeb8d5;
+    }
+
+    .estimate strong {
+      display: block;
+      color: white;
+      font-size: 22px;
+      margin-top: 5px;
+    }
+
+    .bank-box {
+      padding: 18px;
+      background: #0d1530;
+      border: 1px solid #303b5e;
+      border-radius: 12px;
+      margin-bottom: 20px;
+    }
+
+    .bank-title {
+      font-weight: 700;
+      margin-bottom: 7px;
+    }
+
+    .bank-text {
+      color: #aeb8d5;
+      line-height: 1.5;
+      font-size: 14px;
+    }
+
+    button {
+      width: 100%;
+      padding: 16px;
+      border: none;
+      border-radius: 11px;
+      background: #6675ff;
+      color: white;
+      font-size: 17px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #7885ff;
+    }
+
+    .notice {
+      margin-top: 18px;
+      color: #8f9ab8;
+      font-size: 13px;
+      line-height: 1.5;
+      text-align: center;
+    }
+
+    .back {
+      display: inline-block;
+      margin-top: 20px;
+      color: #7180ff;
+      text-decoration: none;
+    }
+
+    @media (max-width: 600px) {
+      nav {
+        padding: 0 18px;
+      }
+
+      nav a {
+        margin-left: 10px;
+        font-size: 12px;
+      }
+
+      h1 {
+        font-size: 34px;
+      }
+
+      .container {
+        margin-top: 35px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <nav>
+    <div class="logo">
+      Crypto<span>Bridge</span>
+    </div>
+
+    <div>
+      <a href="index.html">Markets</a>
+      <a href="index.html">Wallet</a>
+      <a href="buy.html">Buy</a>
+    </div>
+  </nav>
+
+  <main class="container">
+
+    <h1>Buy Crypto</h1>
+
+    <p class="subtitle">
+      Purchase digital assets using a linked bank account.
+    </p>
+
+    <div class="card">
+
+      <label for="coin">Choose cryptocurrency</label>
+
+      <select id="coin">
+        <option value="BTC">Bitcoin (BTC)</option>
+        <option value="ETH">Ethereum (ETH)</option>
+        <option value="SOL">Solana (SOL)</option>
+        <option value="USDT">Tether (USDT)</option>
+      </select>
+
+      <label for="amount">Amount in USD</label>
+
+      <input
+        id="amount"
+        type="number"
+        min="1"
+        step="0.01"
+        placeholder="100.00"
+        oninput="updateEstimate()"
+      >
+
+      <div class="estimate">
+        Estimated purchase
+        <strong id="estimate">$0.00</strong>
+      </div>
+
+      <div class="bank-box">
+        <div class="bank-title">Bank account</div>
+
+        <div class="bank-text">
+          Your bank account will be securely connected through a supported
+          payment provider. CryptoBridge does not display or store your
+          banking credentials on this page.
+        </div>
+      </div>
+
+      <button onclick="connectBank()">
+        Connect Bank Account
+      </button>
+
+      <div class="notice">
+        Bank availability, identity checks, fraud screening and transaction
+        limits may apply before a purchase can be completed.
+      </div>
+
+    </div>
+
+    <a class="back" href="index.html">
+      ← Back to CryptoBridge
+    </a>
+
+  </main>
+
+  <script>
+    function updateEstimate() {
+      const amount = Number(document.getElementById("amount").value || 0);
+
+      document.getElementById("estimate").textContent =
+        "$" + amount.toFixed(2);
+    }
+
+    function connectBank() {
+      alert(
+        "Bank connection will be enabled after a supported ACH/payment provider is connected to CryptoBridge."
+      );
+    }
+  </script>
+
+</body>
+  </html>
