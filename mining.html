@@ -547,14 +547,46 @@ function getWorkers(data) {
 
 
     function getWorkerHashrate(worker) {
+    const current = Number(
+        findValue(worker, [
+            "hashRate",
+            "hashrate",
+            "hash_rate",
+            "currentHashrate",
+            "current_hashrate"
+        ]) || 0
+    );
 
-      return findValue(worker, [
-        "hashrate",
-        "hashRate",
-        "hash_rate",
-        "currentHashrate",
-        "current_hashrate"
-      ]) || 0;
+    const avg3 = Number(
+        findValue(worker, [
+            "avg3HashRate",
+            "avg3hashRate",
+            "avg3_hash_rate"
+        ]) || 0
+    );
+
+    const avg1 = Number(
+        findValue(worker, [
+            "avg1HashRate",
+            "avg1hashRate",
+            "avg1_hash_rate"
+        ]) || 0
+    );
+
+    const avg24 = Number(
+        findValue(worker, [
+            "avg24HashRate",
+            "avg24hashRate",
+            "avg24_hash_rate"
+        ]) || 0
+    );
+
+    if (current > 0) return current;
+    if (avg3 > 0) return avg3;
+    if (avg1 > 0) return avg1;
+    if (avg24 > 0) return avg24;
+
+    return 0;
     }
 
 
