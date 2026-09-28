@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>CryptoBridge Admin</title>
+
+<style>
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+}
+
+body{
+  font-family:Arial,sans-serif;
+  background:#0b1020;
+  color:#fff;
+}
+
+header{
+  background:#11182d;
+  border-bottom:1px solid #27304a;
+  padding:18px 5%;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+
+.logo{
+  font-size:22px;
+  font-weight:bold;
+}
+
+.logo span{
+  color:#6c7cff;
+}
+
+.admin-badge{
+  background:#202a49;
+  padding:8px 12px;
+  border-radius:8px;
+  color:#aeb8d4;
+  font-size:13px;
+}
+
+.layout{
+  display:flex;
+  min-height:calc(100vh - 70px);
+}
+
+.sidebar{
+  width:230px;
+  background:#11182d;
+  border-right:1px solid #27304a;
+  padding:25px 15px;
+}
+
+.sidebar button{
+  width:100%;
+  margin-bottom:8px;
+  padding:13px;
+  border:0;
+  border-radius:9px;
+  background:transparent;
+  color:#aeb8d4;
+  text-align:left;
+  cursor:pointer;
+  font-weight:bold;
+}
+
+.sidebar button:hover,
+.sidebar button.active{
+  background:#202a49;
+  color:#fff;
+}
+
+.main{
+  flex:1;
+  padding:30px;
+  overflow-x:auto;
+}
+
+h1{
+  font-size:30px;
+  margin-bottom:8px;
+}
+
+.subtitle{
+  color:#8995b3;
+  margin-bottom:25px;
+}
+
+.stats{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+  gap:15px;
+  margin-bottom:30px;
+}
+
+.stat{
+  background:#11182d;
+  border:1px solid #27304a;
+  border-radius:14px;
+  padding:20px;
+}
+
+.stat-label{
+  color:#8995b3;
+  font-size:13px;
+}
+
+.stat-value{
+  font-size:27px;
+  font-weight:bold;
+  margin-top:8px;
+}
+
+.panel{
+  background:#11182d;
+  border:1px solid #27304a;
+  border-radius:14px;
+  padding:20px;
+  margin-bottom:20px;
+}
+
+.panel h2{
+  font-size:20px;
+  margin-bottom:18px;
+}
+
+table{
+  width:100%;
+  border-collapse:collapse;
+  min-width:650px;
+}
+
+th,
+td{
+  padding:13px 10px;
+  border-bottom:1px solid #27304a;
+  text-align:left;
+}
+
+th{
+  color:#8995b3;
+  font-size:13px;
+}
+
+td{
+  color:#dce2f2;
+}
+
+.status{
+  display:inline-block;
+  padding:5px 9px;
+  border-radius:7px;
+  font-size:12px;
+  font-weight:bold;
+}
+
+.approved{
+  background:#123d30;
+  color:#58d5a2;
+}
+
+.pending{
+  background:#463818;
+  color:#f0c85a;
+}
+
+.blocked{
+  background:#451d27;
+  color:#ff8294;
+}
+
+button.action{
+  padding:7px 10px;
+  border:0;
+  border-radius:7px;
+  cursor:pointer;
+  background:#202a49;
+  color:#fff;
+}
+
+button.action:hover{
+  background:#6c7cff;
+}
+
+.section{
+  display:none;
+}
+
+.section.active{
+  display:block;
+}
+
+.notice{
+  background:#171f38;
+  border:1px solid #34405f;
+  padding:15px;
+  border-radius:10px;
+  color:#aeb8d4;
+  margin-bottom:20px;
+}
+
+@media(max-width:750px){
+
+  .layout{
+    display:block;
+  }
+
+  .sidebar{
+    width:100%;
+    border-right:0;
+    border-bottom:1px solid #27304a;
+    display:flex;
+    overflow-x:auto;
+    gap:7px;
+  }
+
+  .sidebar button{
+    min-width:max-content;
+    margin:0;
+  }
+
+  .main{
+    padding:20px 14px;
+  }
+
+}
+</style>
+</head>
+
+<body>
+
+<header>
+
+  <div class="logo">
+    Crypto<span>Bridge</span> Admin
+  </div>
+
+  <div class="admin-badge">
+    ADMIN DASHBOARD
+  </div>
+
+</header>
+
+
+<div class="layout">
+
+  <aside class="sidebar">
+
+    <button class="active" onclick="showSection('overview',this)">
+      📊 Overview
+    </button>
+
+    <button onclick="showSection('users',this)">
+      👥 Users
+    </button>
+
+    <button onclick="showSection('purchases',this)">
+      💰 Purchases
+    </button>
+
+    <button onclick="showSection('transactions',this)">
+      💸 Transactions
+    </button>
+
+    <button onclick="showSection('forex',this)">
+      📈 Forex
+    </button>
+
+    <button onclick="showSection('mining',this)">
+      ⛏️ Mining
+    </button>
+
+  </aside>
+
+
+  <main class="main">
+
+
+    <!-- OVERVIEW -->
+
+    <div id="overview" class="section active">
+
+      <h1>Dashboard</h1>
+
+      <p class="subtitle">
+        CryptoBridge platform overview
+      </p>
+
+
+      <div class="notice">
+        Demo administration interface. Connect this dashboard
+        to a protected backend before using it with real customer
+        or financial data.
+      </div>
+
+
+      <div class="stats">
+
+        <div class="stat">
+          <div class="stat-label">Registered Users</div>
+          <div class="stat-value">0</div>
+        </div>
+
+        <div class="stat">
+          <div class="stat-label">Crypto Purchases</div>
+          <div class="stat-value">0</div>
+        </div>
+
+        <div class="stat">
+          <div class="stat-label">Transactions</div>
+          <div class="stat-value">0</div>
+        </div>
+
+        <div class="stat">
+          <div class="stat-label">Forex Orders</div>
+          <div class="stat-value">0</div>
+        </div>
+
+      </div>
+
+
+      <div class="panel">
+
+        <h2>Platform Status</h2>
+
+        <table>
+
+          <tr>
+            <th>Service</th>
+            <th>Status</th>
+          </tr>
+
+          <tr>
+            <td>CryptoBridge Website</td>
+            <td>
+              <span class="status approved">ONLINE</span>
+            </td>
+          </tr>
+
+          <tr>
+            <td>Wallet Interface</td>
+            <td>
+              <span class="status approved">ACTIVE</span>
+            </td>
+          </tr>
+
+          <tr>
+            <td>Crypto Purchases</td>
+            <td>
+              <span class="status pending">PROVIDER REQUIRED</span>
+            </td>
+          </tr>
+
+          <tr>
+            <td>Forex Execution</td>
+            <td>
+              <span class="status pending">BROKER REQUIRED</span>
+            </td>
+          </tr>
+
+        </table>
+
+      </div>
+
+    </div>
+
+
+    <!-- USERS -->
+
+    <div id="users" class="section">
+
+      <h1>Users</h1>
+
+      <p class="subtitle">
+        Customer account management
+      </p>
+
+      <div class="panel">
+
+        <h2>Registered Users</h2>
+
+        <table>
+
+          <thead>
+            <tr>
+              <th>User</th>
+              <th>Email</th>
+              <th>Status</th>
+              <th>Joined</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+
+          <tbody id="usersTable">
+
+            <tr>
+              <td colspan="5">
+                No users connected to the backend yet.
+              </td>
+            </tr>
+
+          </tbody>
+
+        </table>
+
+      </div>
+
+    </div>
+
+
+    <!-- PURCHASES -->
+
+    <div id="purchases" class="section">
+
+      <h1>Crypto Purchases</h1>
+
+      <p class="subtitle">
+        Monitor cryptocurrency purchase requests
+      </p>
+
+      <div class="panel">
+
+        <h2>Purchase Activity</h2>
+
+        <table>
+
+          <thead>
+            <tr>
+              <th>Reference</th>
+              <th>Asset</th>
+              <th>Amount</th>
+              <th>Payment</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+
+          <tbody>
+
+            <tr>
+              <td colspan="5">
+                No purchase records yet.
+              </td>
+            </tr>
+
+          </tbody>
+
+        </table>
+
+      </div>
+
+    </div>
+
+
+    <!-- TRANSACTIONS -->
+
+    <div id="transactions" class="section">
+
+      <h1>Transactions</h1>
+
+      <p class="subtitle">
+        Blockchain transaction monitoring
+      </p>
+
+      <div class="panel">
+
+        <h2>Recent Transactions</h2>
+
+        <table>
+
+          <thead>
+            <tr>
+              <th>Hash</th>
+              <th>Asset</th>
+              <th>Amount</th>
+              <th>Type</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+
+          <tbody>
+
+            <tr>
+              <td colspan="5">
+                No blockchain transactions yet.
+              </td>
+            </tr>
+
+          </tbody>
+
+        </table>
+
+      </div>
+
+    </div>
+
+
+    <!-- FOREX -->
+
+    <div id="forex" class="section">
+
+      <h1>Forex</h1>
+
+      <p class="subtitle">
+        Forex order monitoring
+      </p>
+
+      <div class="panel">
+
+        <h2>Forex Orders</h2>
+
+        <table>
+
+          <thead>
+            <tr>
+              <th>Pair</th>
+              <th>Side</th>
+              <th>Amount</th>
+              <th>Rate</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+
+          <tbody>
+
+            <tr>
+              <td colspan="5">
+                No forex orders yet.
+              </td>
+            </tr>
+
+          </tbody>
+
+        </table>
+
+      </div>
+
+    </div>
+
+
+    <!-- MINING -->
+
+    <div id="mining" class="section">
+
+      <h1>Mining</h1>
+
+      <p class="subtitle">
+        Mining activity monitoring
+      </p>
+
+      <div class="stats">
+
+        <div class="stat">
+          <div class="stat-label">Mining Users</div>
+          <div class="stat-value">0</div>
+        </div>
+
+        <div class="stat">
+          <div class="stat-label">Active Workers</div>
+          <div class="stat-value">0</div>
+        </div>
+
+        <div class="stat">
+          <div class="stat-label">Hashrate</div>
+          <div class="stat-value">0 H/s</div>
+        </div>
+
+      </div>
+
+
+      <div class="panel">
+
+        <h2>Mining Activity</h2>
+
+        <table>
+
+          <thead>
+            <tr>
+              <th>User</th>
+              <th>Asset</th>
+              <th>Hashrate</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+
+          <tbody>
+
+            <tr>
+              <td colspan="4">
+                No mining activity connected yet.
+              </td>
+            </tr>
+
+          </tbody>
+
+        </table>
+
+      </div>
+
+    </div>
+
+  </main>
+
+</div>
+
+
+<script>
+
+function showSection(id,button){
+
+  document
+    .querySelectorAll(".section")
+    .forEach(section=>{
+      section.classList.remove("active");
+    });
+
+
+  document
+    .getElementById(id)
+    .classList.add("active");
+
+
+  document
+    .querySelectorAll(".sidebar button")
+    .forEach(btn=>{
+      btn.classList.remove("active");
+    });
+
+
+  button.classList.add("active");
+
+}
+
+</script>
+
+</body>
+  </html>
