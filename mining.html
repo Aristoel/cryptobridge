@@ -487,38 +487,39 @@
       return 0;
     }
 
+function getWorkers(data) {
 
-    function getWorkers(data) {
+  if (Array.isArray(data.collectiveWorkers)) {
+    return data.collectiveWorkers;
+  }
 
-      if (Array.isArray(data.workers)) {
-        return data.workers;
-      }
+  if (Array.isArray(data.workers)) {
+    return data.workers;
+  }
 
-      if (
-        data.stats &&
-        Array.isArray(data.stats.workers)
-      ) {
-        return data.stats.workers;
-      }
+  if (
+    data.stats &&
+    Array.isArray(data.stats.workers)
+  ) {
+    return data.stats.workers;
+  }
 
-      if (
-        data.data &&
-        Array.isArray(data.data.workers)
-      ) {
-        return data.data.workers;
-      }
+  if (
+    data.data &&
+    Array.isArray(data.data.workers)
+  ) {
+    return data.data.workers;
+  }
 
-      if (
-        data.result &&
-        Array.isArray(data.result.workers)
-      ) {
-        return data.result.workers;
-      }
+  if (
+    data.result &&
+    Array.isArray(data.result.workers)
+  ) {
+    return data.result.workers;
+  }
 
-      return [];
-    }
-
-
+  return [];
+    }    
     function getWorkerName(worker) {
 
       return findValue(worker, [
